@@ -75,15 +75,15 @@ Get-AzureADUser | ft DisplayName, UserPrincipalName
 
 ## Setup Administrative Units ######################################################
 #Create West Coast AU
-New-AzureADAdministrativeUnit -Description “West Coast region” -DisplayName “West Coast”
+New-AzureADAdministrativeUnit -Description "West Coast region" -DisplayName "West Coast"
 #Create East Coast AU
-New-AzureADAdministrativeUnit -Description “East Coast region” -DisplayName “East Coast”
+New-AzureADAdministrativeUnit -Description "East Coast region" -DisplayName "East Coast"
 
 #Get the list of AUs
 Get-AzureADAdministrativeUnit | ft DisplayName, Description
 
 #Add West Coast AU member
-$westCoastAU = Get-AzureADAdministrativeUnit -Filter “displayname eq 'West Coast'”
+$westCoastAU = Get-AzureADAdministrativeUnit -Filter "displayname eq 'West Coast'"
 $initialDomain = (Get-AzureADDomain)[0].Name
 $westCoastUser1 = Get-AzureADUser -Filter "UserPrincipalName eq 'WestCoastUser1@$InitialDomain'"
 $westCoastUser2 = Get-AzureADUser -Filter "UserPrincipalName eq 'WestCoastUser2@$InitialDomain'"
@@ -92,7 +92,7 @@ Add-AzureADAdministrativeUnitMember -ObjectId $westCoastAU.ObjectId -RefObjectId
 Get-AzureADAdministrativeUnitMember -ObjectId $westCoastAU.ObjectId | Get-AzureADUser
 
 #Add East Coast AU member
-$eastCoastAU = Get-AzureADAdministrativeUnit -Filter “displayname eq 'East Coast'”
+$eastCoastAU = Get-AzureADAdministrativeUnit -Filter "displayname eq 'East Coast'"
 $eastCoastUser1 = Get-AzureADUser -Filter "UserPrincipalName eq 'EastCoastUser1@$InitialDomain'"
 $eastCoastUser2 = Get-AzureADUser -Filter "UserPrincipalName eq 'EastCoastUser2@$InitialDomain'"
 Add-AzureADAdministrativeUnitMember -ObjectId $eastCoastAU.ObjectId -RefObjectId $eastCoastUser1.ObjectId
@@ -115,7 +115,7 @@ foreach($i in $admins) {
 #Add West Coast-scoped User Account Admin role member
 $westCoastUA = Get-AzureADUser -Filter "UserPrincipalName eq 'WestCoastUserAdmin@$InitialDomain'"
 $uaRoleMemberInfo = New-Object -TypeName Microsoft.Open.AzureAD.Model.RoleMemberInfo -Property @{ ObjectId =  $westCoastUA.ObjectId }
-Add-AzureADScopedRoleMembership -RoleObjectId $uaAdmin.ObjectId -ObjectId $westCoastAU.ObjectId -RoleMemberInfo $uaRoleMemberInfo
+"Add-AzureADScopedRoleMembership -RoleObjectId $uaAdmin.ObjectId -ObjectId $westCoastAU.ObjectId -RoleMemberInfo $uaRoleMemberInfo
 
 #Add West Coast-scoped Helpdesk Admin role member
 $westCoastHDA = Get-AzureADUser -Filter "UserPrincipalName eq 'WestCoastHelpdeskAdmin@$InitialDomain'"
@@ -147,7 +147,7 @@ Run this script after the Global Admin script to walk through the experience of 
 Connect-AzureAD
 
 #Get list of West Coast AU members
-$westCoastAU = Get-AzureADAdministrativeUnit -Filter “displayname eq 'West Coast'”
+$westCoastAU = Get-AzureADAdministrativeUnit -Filter "displayname eq 'West Coast'"
 Get-AzureADAdministrativeUnitMember -ObjectId $westCoastAU.ObjectId | Get-AzureADUser
 
 #Set department property (for example) for West Coast AU member.
@@ -165,7 +165,7 @@ Set-AzureADUserPassword -ObjectId $westCoastUser1.ObjectId -Password $password
 #TODO: Example of assigning license for West Coast AU member
 
 #Get list of East Coast AU members
-$eastCoastAU = Get-AzureADAdministrativeUnit -Filter “displayname eq 'East Coast'”
+$eastCoastAU = Get-AzureADAdministrativeUnit -Filter "displayname eq 'East Coast'"
 Get-AzureADAdministrativeUnitMember -ObjectId $eastCoastAU.ObjectId | Get-AzureADUser
 
 #Attempt to set password for user in East Coast AU. All attempts to update users who are not members of West Coast AU should result in access denied.
@@ -180,7 +180,7 @@ Run this script after the Global Admin script to walk through the experience of 
 Connect-AzureAD
 
 #Get list of East Coast AU members
-$eastCoastAU = Get-AzureADAdministrativeUnit -Filter “displayname eq 'East Coast'”
+$eastCoastAU = Get-AzureADAdministrativeUnit -Filter "displayname eq 'East Coast'"
 Get-AzureADAdministrativeUnitMember -ObjectId $eastCoastAU.ObjectId | Get-AzureADUser
 
 #Set password for user in East Coast AU
@@ -229,11 +229,11 @@ foreach($adminunit in $adminunits) {
 
 ## Delete demo Administrative Units
 Get-AzureADAdministrativeUnit
-$WestCoastAU = Get-AzureADAdministrativeUnit -Filter “displayname eq 'West Coast'”
+$WestCoastAU = Get-AzureADAdministrativeUnit -Filter "displayname eq 'West Coast'"
 foreach ($au in $WestCoastAU) {
     Remove-AzureADAdministrativeUnit –ObjectId $au.ObjectId
 }
-$eastcoastau = Get-AzureADAdministrativeUnit -Filter “displayname eq 'East Coast'”
+$eastcoastau = Get-AzureADAdministrativeUnit -Filter "displayname eq 'East Coast'"
 foreach ($au in $eastcoastau) {
     Remove-AzureADAdministrativeUnit –ObjectId $au.ObjectId
 }
